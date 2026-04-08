@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { isNonEmptyString } from '@sniptt/guards';
 import { isDefined } from 'twenty-shared/utils';
 
+import { PlaceDetailsResultDTO } from 'src/engine/core-modules/geo-map/dtos/place-details-result.dto';
 import {
   type AutocompleteSanitizedResult,
   sanitizeAutocompleteResults,
@@ -64,7 +65,7 @@ export class GeoMapService {
   public async getAddressDetails(
     placeId: string,
     token: string,
-  ): Promise<AddressFields | undefined> {
+  ): Promise<PlaceDetailsResultDTO | undefined> {
     const httpClient = this.secureHttpClientService.getHttpClient();
 
     const result = await httpClient.get(
@@ -75,9 +76,9 @@ export class GeoMapService {
       return sanitizePlaceDetailsResults(
         result.data.result?.address_components,
         result.data.result?.geometry?.location,
-      );
+      ) as PlaceDetailsResultDTO;
     }
 
-    return {};
+    return undefined;
   }
 }
