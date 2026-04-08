@@ -4,13 +4,13 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { type ReactNode } from 'react';
 
 import {
-    GET_AUTOCOMPLETE_QUERY,
-    GET_PLACE_DETAILS_QUERY,
+  GET_AUTOCOMPLETE_QUERY,
+  GET_PLACE_DETAILS_QUERY,
 } from '@/geo-map/graphql-query/geo-map-appolo.api';
 import { useGetPlaceApiData } from '@/geo-map/hooks/useGetPlaceApiData';
 import {
-    type PlaceAutocompleteResult,
-    type PlaceDetailsResult,
+  type PlaceAutocompleteResult,
+  type PlaceDetailsResult,
 } from '@/geo-map/types/placeApi';
 
 const mockAutocompleteResults: PlaceAutocompleteResult[] = [
