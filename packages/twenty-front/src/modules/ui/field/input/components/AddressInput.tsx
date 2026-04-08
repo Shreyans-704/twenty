@@ -18,11 +18,11 @@ import { isDefined } from 'twenty-shared/utils';
 import { MOBILE_VIEWPORT } from 'twenty-ui/theme-constants';
 import { v4 } from 'uuid';
 
-import { t } from '@lingui/core/macro';
-import { type AllowedAddressSubField } from 'twenty-shared/types';
 import { useAddressAutocomplete } from '@/ui/field/input/hooks/useAddressAutocomplete';
 import { useCountryUtils } from '@/ui/field/input/hooks/useCountryUtils';
 import { useFocusManagement } from '@/ui/field/input/hooks/useFocusManagement';
+import { t } from '@lingui/core/macro';
+import { type AllowedAddressSubField } from 'twenty-shared/types';
 
 const StyledAddressContainer = styled.div`
   padding: 4px 8px;
@@ -188,17 +188,12 @@ export const AddressInput = ({
       const token = tokenForPlaceApi ?? '';
       if (!isDefined(placeAutocomplete)) return;
 
-      const text: string | undefined =
-        typeOfAddressForAutocomplete !== 'addressCity'
-          ? placeAutocomplete.text
-          : undefined;
-
-      autoFillInputsFromPlaceDetails(placeId, token, text, internalValue);
+      // Don't pass the full autocomplete text - let the street address come from place details
+      autoFillInputsFromPlaceDetails(placeId, token, undefined, internalValue);
     },
     [
       placeAutocompleteData,
       tokenForPlaceApi,
-      typeOfAddressForAutocomplete,
       autoFillInputsFromPlaceDetails,
       internalValue,
     ],
