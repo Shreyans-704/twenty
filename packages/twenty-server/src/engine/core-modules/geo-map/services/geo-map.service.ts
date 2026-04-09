@@ -70,18 +70,27 @@ export class GeoMapService {
     );
 
     if (result.data.status === 'OK') {
-      return sanitizePlaceDetailsResults(
+      const addressData = sanitizePlaceDetailsResults(
         result.data.result?.address_components,
         result.data.result?.geometry?.location,
-      ) as PlaceDetailsResultDTO;
+      );
+
+      return {
+        street: addressData.street ?? null,
+        city: addressData.city ?? null,
+        state: addressData.state ?? null,
+        country: addressData.country ?? null,
+        postcode: addressData.postcode ?? null,
+        location: addressData.location ?? null,
+      };
     }
 
     return {
       street: null,
       city: null,
       state: null,
-      postcode: null,
       country: null,
+      postcode: null,
       location: null,
     };
   }
