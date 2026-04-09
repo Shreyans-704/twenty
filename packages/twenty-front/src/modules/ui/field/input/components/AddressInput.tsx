@@ -188,8 +188,12 @@ export const AddressInput = ({
       const token = tokenForPlaceApi ?? '';
       if (!isDefined(placeAutocomplete)) return;
 
-      // Use autocomplete text as fallback if place details street is missing
-      const fallbackStreet = placeAutocomplete.text;
+      // Only use autocomplete text as fallback when selecting from street field
+      // For city field selections, don't use full text as street (e.g., "San Francisco, CA" should not populate street1)
+      const fallbackStreet =
+        typeOfAddressForAutocomplete === 'addressStreet1'
+          ? placeAutocomplete.text
+          : undefined;
       autoFillInputsFromPlaceDetails(
         placeId,
         token,
@@ -200,6 +204,7 @@ export const AddressInput = ({
     [
       placeAutocompleteData,
       tokenForPlaceApi,
+      typeOfAddressForAutocomplete,
       autoFillInputsFromPlaceDetails,
       internalValue,
     ],
