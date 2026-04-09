@@ -76,11 +76,11 @@ export class GeoMapService {
       );
 
       return {
-        street: addressData.street ?? null,
-        city: addressData.city ?? null,
-        state: addressData.state ?? null,
-        country: addressData.country ?? null,
-        postcode: addressData.postcode ?? null,
+        street: addressData.street || null,
+        city: addressData.city || null,
+        state: addressData.state || null,
+        country: addressData.country || null,
+        postcode: addressData.postcode || null,
         location: addressData.location ?? null,
       };
     }
