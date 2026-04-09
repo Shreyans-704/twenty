@@ -12,20 +12,20 @@ export class LocationDTO {
 @ObjectType('PlaceDetailsResult')
 export class PlaceDetailsResultDTO {
   @Field(() => String, { nullable: true })
-  street!: string | null;
+  street?: string;
 
   @Field(() => String, { nullable: true })
-  city!: string | null;
+  city?: string;
 
   @Field(() => String, { nullable: true })
-  state!: string | null;
+  state?: string;
 
   @Field(() => String, { nullable: true })
-  country!: string | null;
+  country?: string;
 
   @Field(() => String, { nullable: true })
-  postcode!: string | null;
+  postcode?: string;
 
   @Field(() => LocationDTO, { nullable: true })
-  location!: LocationDTO | null;
+  location?: LocationDTO;
 }
