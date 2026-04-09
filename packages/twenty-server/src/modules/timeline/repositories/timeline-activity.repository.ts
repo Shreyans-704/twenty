@@ -230,10 +230,16 @@ export class TimelineActivityRepository {
           },
         );
 
+      const timelineActivityId = Object.values(
+        flatObjectMetadataMaps.byUniversalIdentifier,
+      ).find((obj) => obj?.nameSingular === 'timelineActivity')?.id;
+
+      if (!timelineActivityId) {
+        return false;
+      }
+
       const timelineActivityMetadata = findFlatEntityByIdInFlatEntityMaps({
-        flatEntityId: Object.values(
-          flatObjectMetadataMaps.byUniversalIdentifier,
-        ).find((obj) => obj?.nameSingular === 'timelineActivity')?.id,
+        flatEntityId: timelineActivityId,
         flatEntityMaps: flatObjectMetadataMaps,
       });
 
