@@ -5,8 +5,8 @@ import { isDefined } from 'twenty-shared/utils';
 
 import { PlaceDetailsResultDTO } from 'src/engine/core-modules/geo-map/dtos/place-details-result.dto';
 import {
-    type AutocompleteSanitizedResult,
-    sanitizeAutocompleteResults,
+  type AutocompleteSanitizedResult,
+  sanitizeAutocompleteResults,
 } from 'src/engine/core-modules/geo-map/utils/sanitize-autocomplete-results.util';
 import { sanitizePlaceDetailsResults } from 'src/engine/core-modules/geo-map/utils/sanitize-place-details-results.util';
 import { SecureHttpClientService } from 'src/engine/core-modules/secure-http-client/secure-http-client.service';
