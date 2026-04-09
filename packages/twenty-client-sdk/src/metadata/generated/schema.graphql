@@ -1245,6 +1245,7 @@ Display mode for field configuration widgets
 """
 enum FieldDisplayMode {
   CARD
+  EDITOR
   FIELD
   VIEW
 }
