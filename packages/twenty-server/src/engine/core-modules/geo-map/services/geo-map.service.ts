@@ -77,12 +77,12 @@ export class GeoMapService {
     }
 
     return {
-      street: undefined,
-      city: undefined,
-      state: undefined,
-      postcode: undefined,
-      country: undefined,
-      location: undefined,
+      street: null,
+      city: null,
+      state: null,
+      postcode: null,
+      country: null,
+      location: null,
     };
   }
 }
