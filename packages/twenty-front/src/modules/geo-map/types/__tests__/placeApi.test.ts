@@ -122,12 +122,14 @@ describe('placeApi types', () => {
   describe('PlaceDetailsResult', () => {
     it('should have correct structure with all fields', () => {
       const result: PlaceDetailsResult = {
+        street: '123 Main St',
         state: 'California',
         postcode: '90210',
         city: 'Beverly Hills',
         country: 'United States',
       };
 
+      expect(result.street).toBe('123 Main St');
       expect(result.state).toBe('California');
       expect(result.postcode).toBe('90210');
       expect(result.city).toBe('Beverly Hills');
@@ -142,18 +144,21 @@ describe('placeApi types', () => {
 
       expect(resultWithMissingFields.city).toBe('Paris');
       expect(resultWithMissingFields.country).toBe('France');
+      expect(resultWithMissingFields.street).toBeUndefined();
       expect(resultWithMissingFields.state).toBeUndefined();
       expect(resultWithMissingFields.postcode).toBeUndefined();
     });
 
     it('should handle undefined values', () => {
       const result: PlaceDetailsResult = {
+        street: undefined,
         state: undefined,
         postcode: undefined,
         city: 'London',
         country: 'United Kingdom',
       };
 
+      expect(result.street).toBeUndefined();
       expect(result.state).toBeUndefined();
       expect(result.postcode).toBeUndefined();
       expect(result.city).toBe('London');
@@ -162,12 +167,14 @@ describe('placeApi types', () => {
 
     it('should handle all undefined values', () => {
       const result: PlaceDetailsResult = {
+        street: undefined,
         state: undefined,
         postcode: undefined,
         city: undefined,
         country: undefined,
       };
 
+      expect(result.street).toBeUndefined();
       expect(result.state).toBeUndefined();
       expect(result.postcode).toBeUndefined();
       expect(result.city).toBeUndefined();
@@ -176,12 +183,16 @@ describe('placeApi types', () => {
 
     it('should enforce string or undefined types', () => {
       const result: PlaceDetailsResult = {
+        street: '123 Broadway',
         state: 'New York',
         postcode: '10001',
         city: 'New York City',
         country: 'United States',
       };
 
+      expect(
+        typeof result.street === 'string' || result.street === undefined,
+      ).toBe(true);
       expect(
         typeof result.state === 'string' || result.state === undefined,
       ).toBe(true);
@@ -198,6 +209,7 @@ describe('placeApi types', () => {
 
     it('should handle international addresses', () => {
       const japaneseResult: PlaceDetailsResult = {
+        street: '千代田区丸の内1-1',
         state: '東京都',
         postcode: '100-0001',
         city: '東京',
@@ -205,13 +217,16 @@ describe('placeApi types', () => {
       };
 
       const frenchResult: PlaceDetailsResult = {
+        street: '10 Rue de Rivoli',
         state: 'Île-de-France',
         postcode: '75001',
         city: 'Paris',
         country: 'France',
       };
 
+      expect(japaneseResult.street).toBe('千代田区丸の内1-1');
       expect(japaneseResult.city).toBe('東京');
+      expect(frenchResult.street).toBe('10 Rue de Rivoli');
       expect(frenchResult.state).toBe('Île-de-France');
     });
   });

@@ -96,6 +96,7 @@ describe('useAddressAutocomplete', () => {
   it('should autofill inputs from place details', async () => {
     const mockOnChange = jest.fn();
     const mockPlaceData = {
+      street: '456 Broadway',
       city: 'New York',
       state: 'NY',
       country: 'US',
@@ -129,7 +130,7 @@ describe('useAddressAutocomplete', () => {
     });
 
     expect(mockOnChange).toHaveBeenCalledWith({
-      addressStreet1: '123 Main St',
+      addressStreet1: '456 Broadway',
       addressStreet2: null,
       addressCity: 'New York',
       addressState: 'NY',
@@ -143,6 +144,7 @@ describe('useAddressAutocomplete', () => {
   it('should preserve existing values when place data is missing', async () => {
     const mockOnChange = jest.fn();
     const mockPlaceData = {
+      street: null,
       city: null,
       state: null,
       country: null,
@@ -230,6 +232,7 @@ describe('useAddressAutocomplete', () => {
   it('should handle country code conversion correctly', async () => {
     const mockOnChange = jest.fn();
     const mockPlaceData = {
+      street: '101 Main St',
       country: 'US',
       city: 'Boston',
     };

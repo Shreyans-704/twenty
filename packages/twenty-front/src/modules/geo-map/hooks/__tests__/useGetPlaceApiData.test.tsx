@@ -25,6 +25,7 @@ const mockAutocompleteResults: PlaceAutocompleteResult[] = [
 ];
 
 const mockPlaceDetails: PlaceDetailsResult = {
+  street: '10 Rue de Rivoli',
   city: 'Paris',
   country: 'France',
   state: 'Île-de-France',
