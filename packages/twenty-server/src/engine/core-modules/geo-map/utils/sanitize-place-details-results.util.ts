@@ -4,6 +4,7 @@ export type AddressComponent = {
   types: string[];
 };
 export type AddressFields = {
+  street?: string;
   state?: string;
   postcode?: string;
   city?: string;
@@ -17,14 +18,39 @@ export type locationFields = {
 export const sanitizePlaceDetailsResults = (
   AddressComponents: AddressComponent[],
   location?: locationFields,
+  countryCode?: string,
 ): AddressFields => {
   if (!AddressComponents || AddressComponents.length === 0) return {};
 
   const address: AddressFields = {};
+  let streetNumber = '';
+  let route = '';
+  let subpremise = '';
+  let premise = '';
 
   for (const AddressComponent of AddressComponents) {
     for (const type of AddressComponent.types) {
       switch (type) {
+        case 'street_number': {
+          streetNumber = AddressComponent.long_name;
+          break;
+        }
+
+        case 'route': {
+          route = AddressComponent.long_name;
+          break;
+        }
+
+        case 'subpremise': {
+          subpremise = AddressComponent.long_name;
+          break;
+        }
+
+        case 'premise': {
+          premise = AddressComponent.long_name;
+          break;
+        }
+
         case 'postal_code': {
           address.postcode =
             AddressComponent.long_name + (address.postcode ?? '');
@@ -72,6 +98,17 @@ export const sanitizePlaceDetailsResults = (
       }
     }
   }
+
+  const useRouteFirst = countryCode
+    ? ['CN', 'JP', 'KR'].includes(countryCode)
+    : false;
+  const baseStreet = (useRouteFirst ? [route, streetNumber] : [streetNumber, route])
+    .filter((value) => value)
+    .join(' ');
+  const street = [baseStreet, subpremise || premise]
+    .filter((value) => value)
+    .join(', ');
+  address.street = street || undefined;
   address.location = location;
 
   return address;
