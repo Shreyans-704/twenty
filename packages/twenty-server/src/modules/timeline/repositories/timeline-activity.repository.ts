@@ -6,6 +6,7 @@ import { In, MoreThan } from 'typeorm';
 
 import { objectRecordDiffMerge } from 'src/engine/core-modules/event-emitter/utils/object-record-diff-merge';
 import { WorkspaceManyOrAllFlatEntityMapsCacheService } from 'src/engine/metadata-modules/flat-entity/services/workspace-many-or-all-flat-entity-maps-cache.service';
+import { findFlatEntityByIdInFlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/utils/find-flat-entity-by-id-in-flat-entity-maps.util';
 import { buildFieldMapsFromFlatObjectMetadata } from 'src/engine/metadata-modules/flat-field-metadata/utils/build-field-maps-from-flat-object-metadata.util';
 import { GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-datasource/global-workspace-orm.manager';
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
@@ -45,7 +46,7 @@ export class TimelineActivityRepository {
     if (!hasMorphField) {
       this.logger.warn(
         `Timeline activity morph relation field is missing for object '${objectSingularName}'. ` +
-        `Run workspace:sync-metadata to fix this issue.`,
+          `Run workspace:sync-metadata to fix this issue.`,
       );
       return; // Early return to prevent crash
     }
@@ -221,28 +222,36 @@ export class TimelineActivityRepository {
     workspaceId: string,
   ): Promise<boolean> {
     try {
-      const flatEntityMaps =
-        await this.workspaceManyOrAllFlatEntityMapsCacheService.getForWorkspace(
-          workspaceId,
+      const { flatObjectMetadataMaps, flatFieldMetadataMaps } =
+        await this.workspaceManyOrAllFlatEntityMapsCacheService.getOrRecomputeManyOrAllFlatEntityMaps(
+          {
+            workspaceId,
+            flatMapsKeys: ['flatObjectMetadataMaps', 'flatFieldMetadataMaps'],
+          },
         );
 
-      const timelineActivityMetadata = flatEntityMaps.flatObjectMetadataByNameMap[
-        'timelineActivity'
-      ];
+      const timelineActivityMetadata = findFlatEntityByIdInFlatEntityMaps({
+        flatEntityId: Object.values(
+          flatObjectMetadataMaps.byUniversalIdentifier,
+        ).find((obj) => obj?.nameSingular === 'timelineActivity')?.id,
+        flatEntityMaps: flatObjectMetadataMaps,
+      });
 
       if (!timelineActivityMetadata) {
         return false;
       }
 
       const fieldMaps = buildFieldMapsFromFlatObjectMetadata(
+        flatFieldMetadataMaps,
         timelineActivityMetadata,
       );
 
-      const expectedJoinColumnName = await this.getTimelineActivityPropertyName(
-        objectSingularName,
-      );
+      const expectedJoinColumnName =
+        await this.getTimelineActivityPropertyName(objectSingularName);
 
-      return fieldMaps.byFieldName[expectedJoinColumnName] !== undefined;
+      return (
+        fieldMaps.fieldIdByJoinColumnName[expectedJoinColumnName] !== undefined
+      );
     } catch (error) {
       this.logger.error(
         `Error checking timeline activity morph field: ${error instanceof Error ? error.message : 'Unknown error'}`,
