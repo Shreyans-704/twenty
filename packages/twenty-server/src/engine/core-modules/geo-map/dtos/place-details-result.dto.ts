@@ -15,16 +15,16 @@ export class PlaceDetailsResultDTO {
   street?: string;
 
   @Field(() => String, { nullable: true })
-  city?: string;
-
-  @Field(() => String, { nullable: true })
   state?: string;
 
   @Field(() => String, { nullable: true })
-  country?: string;
+  postcode?: string;
 
   @Field(() => String, { nullable: true })
-  postcode?: string;
+  city?: string;
+
+  @Field(() => String, { nullable: true })
+  country?: string;
 
   @Field(() => LocationDTO, { nullable: true })
   location?: LocationDTO;
