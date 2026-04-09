@@ -25,6 +25,7 @@ const mockAutocompleteResults: PlaceAutocompleteResult[] = [
 ];
 
 const mockPlaceDetails: PlaceDetailsResult = {
+  street: 'Paris',
   city: 'Paris',
   country: 'France',
   state: 'Île-de-France',

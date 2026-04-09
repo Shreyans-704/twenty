@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 import { isDefined } from 'class-validator';
 import { type ObjectRecord } from 'twenty-shared/types';
 import { In, MoreThan } from 'typeorm';
 
 import { objectRecordDiffMerge } from 'src/engine/core-modules/event-emitter/utils/object-record-diff-merge';
+import { WorkspaceManyOrAllFlatEntityMapsCacheService } from 'src/engine/metadata-modules/flat-entity/services/workspace-many-or-all-flat-entity-maps-cache.service';
+import { findFlatEntityByIdInFlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/utils/find-flat-entity-by-id-in-flat-entity-maps.util';
+import { buildFieldMapsFromFlatObjectMetadata } from 'src/engine/metadata-modules/flat-field-metadata/utils/build-field-maps-from-flat-object-metadata.util';
 import { GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-datasource/global-workspace-orm.manager';
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
 import { type TimelineActivityPayload } from 'src/modules/timeline/types/timeline-activity-payload';
@@ -20,8 +23,11 @@ type TimelineActivityPayloadWorkspaceIdAndObjectSingularName = {
 
 @Injectable()
 export class TimelineActivityRepository {
+  private readonly logger = new Logger(TimelineActivityRepository.name);
+
   constructor(
     private readonly globalWorkspaceOrmManager: GlobalWorkspaceOrmManager,
+    private readonly workspaceManyOrAllFlatEntityMapsCacheService: WorkspaceManyOrAllFlatEntityMapsCacheService,
   ) {}
 
   async upsertTimelineActivities({
@@ -30,6 +36,20 @@ export class TimelineActivityRepository {
     payloads,
   }: TimelineActivityPayloadWorkspaceIdAndObjectSingularName) {
     const authContext = buildSystemAuthContext(workspaceId);
+
+    // Validate that the timeline activity morph relation field exists
+    const hasMorphField = await this.hasTimelineActivityMorphRelationField(
+      objectSingularName,
+      workspaceId,
+    );
+
+    if (!hasMorphField) {
+      this.logger.warn(
+        `Timeline activity morph relation field is missing for object '${objectSingularName}'. ` +
+          `Run workspace:sync-metadata to fix this issue.`,
+      );
+      return; // Early return to prevent crash
+    }
 
     await this.globalWorkspaceOrmManager.executeInWorkspaceContext(async () => {
       const recentTimelineActivities = await this.findRecentTimelineActivities({
@@ -195,5 +215,54 @@ export class TimelineActivityRepository {
 
   private async getTimelineActivityPropertyName(objectSingularName: string) {
     return `${buildTimelineActivityRelatedMorphFieldMetadataName(objectSingularName)}Id`;
+  }
+
+  private async hasTimelineActivityMorphRelationField(
+    objectSingularName: string,
+    workspaceId: string,
+  ): Promise<boolean> {
+    try {
+      const { flatObjectMetadataMaps, flatFieldMetadataMaps } =
+        await this.workspaceManyOrAllFlatEntityMapsCacheService.getOrRecomputeManyOrAllFlatEntityMaps(
+          {
+            workspaceId,
+            flatMapsKeys: ['flatObjectMetadataMaps', 'flatFieldMetadataMaps'],
+          },
+        );
+
+      const timelineActivityId = Object.values(
+        flatObjectMetadataMaps.byUniversalIdentifier,
+      ).find((obj) => obj?.nameSingular === 'timelineActivity')?.id;
+
+      if (!timelineActivityId) {
+        return false;
+      }
+
+      const timelineActivityMetadata = findFlatEntityByIdInFlatEntityMaps({
+        flatEntityId: timelineActivityId,
+        flatEntityMaps: flatObjectMetadataMaps,
+      });
+
+      if (!timelineActivityMetadata) {
+        return false;
+      }
+
+      const fieldMaps = buildFieldMapsFromFlatObjectMetadata(
+        flatFieldMetadataMaps,
+        timelineActivityMetadata,
+      );
+
+      const expectedJoinColumnName =
+        await this.getTimelineActivityPropertyName(objectSingularName);
+
+      return (
+        fieldMaps.fieldIdByJoinColumnName[expectedJoinColumnName] !== undefined
+      );
+    } catch (error) {
+      this.logger.error(
+        `Error checking timeline activity morph field: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
+      return false;
+    }
   }
 }

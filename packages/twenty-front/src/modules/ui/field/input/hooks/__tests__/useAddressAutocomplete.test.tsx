@@ -1,9 +1,9 @@
 import { useGetPlaceApiData } from '@/geo-map/hooks/useGetPlaceApiData';
+import { useAddressAutocomplete } from '@/ui/field/input/hooks/useAddressAutocomplete';
+import { useCountryUtils } from '@/ui/field/input/hooks/useCountryUtils';
 import { useCloseDropdown } from '@/ui/layout/dropdown/hooks/useCloseDropdown';
 import { useOpenDropdown } from '@/ui/layout/dropdown/hooks/useOpenDropdown';
 import { act, renderHook } from '@testing-library/react';
-import { useAddressAutocomplete } from '@/ui/field/input/hooks/useAddressAutocomplete';
-import { useCountryUtils } from '@/ui/field/input/hooks/useCountryUtils';
 
 // Mock dependencies
 jest.mock('@/geo-map/hooks/useGetPlaceApiData');
@@ -96,6 +96,7 @@ describe('useAddressAutocomplete', () => {
   it('should autofill inputs from place details', async () => {
     const mockOnChange = jest.fn();
     const mockPlaceData = {
+      street: '123 Main St',
       city: 'New York',
       state: 'NY',
       country: 'US',
@@ -109,7 +110,7 @@ describe('useAddressAutocomplete', () => {
     const { result } = renderHook(() => useAddressAutocomplete(mockOnChange));
 
     const internalValue = {
-      addressStreet1: '123 Main St',
+      addressStreet1: '',
       addressStreet2: null,
       addressCity: null,
       addressState: null,
@@ -123,7 +124,7 @@ describe('useAddressAutocomplete', () => {
       await result.current.autoFillInputsFromPlaceDetails(
         'place123',
         'token123',
-        '123 Main St',
+        undefined,
         internalValue,
       );
     });
@@ -170,7 +171,7 @@ describe('useAddressAutocomplete', () => {
       await result.current.autoFillInputsFromPlaceDetails(
         'place123',
         'token123',
-        '123 Main St',
+        undefined,
         internalValue,
       );
     });
