@@ -18,6 +18,7 @@ export type locationFields = {
 export const sanitizePlaceDetailsResults = (
   AddressComponents: AddressComponent[],
   location?: locationFields,
+  country?: string,
 ): AddressFields => {
   if (!AddressComponents || AddressComponents.length === 0) return {};
 
@@ -87,8 +88,38 @@ export const sanitizePlaceDetailsResults = (
   }
 
   // Combine street number and route to form the full street address
+  // with locale-aware formatting
   if (streetNumber || route) {
-    address.street = [streetNumber, route].filter(Boolean).join(' ');
+    // European and other countries use: Street Name Number format
+    const streetFirstCountries = [
+      'DE',
+      'AT',
+      'CH',
+      'FR',
+      'IT',
+      'ES',
+      'NL',
+      'BE',
+      'SE',
+      'NO',
+      'DK',
+      'PL',
+      'CZ',
+      'SK',
+      'HU',
+      'RO',
+      'PT',
+      'GR',
+      'FI',
+    ];
+
+    if (country && streetFirstCountries.includes(country)) {
+      // European format: street name first
+      address.street = [route, streetNumber].filter(Boolean).join(' ');
+    } else {
+      // US/UK format: number first (default)
+      address.street = [streetNumber, route].filter(Boolean).join(' ');
+    }
   }
 
   address.location = location;

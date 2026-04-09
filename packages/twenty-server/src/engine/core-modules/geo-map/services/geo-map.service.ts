@@ -70,9 +70,20 @@ export class GeoMapService {
     );
 
     if (result.data.status === 'OK') {
+      // Extract country code first to pass to sanitizer for locale-aware formatting
+      let countryCode: string | undefined;
+      const addressComponents = result.data.result?.address_components;
+      if (addressComponents) {
+        const countryComponent = addressComponents.find((component: any) =>
+          component.types.includes('country'),
+        );
+        countryCode = countryComponent?.short_name;
+      }
+
       const addressData = sanitizePlaceDetailsResults(
         result.data.result?.address_components,
         result.data.result?.geometry?.location,
+        countryCode,
       );
 
       return {
