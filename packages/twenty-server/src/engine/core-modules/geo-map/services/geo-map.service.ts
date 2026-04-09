@@ -87,22 +87,22 @@ export class GeoMapService {
       );
 
       return {
-        street: addressData.street ?? undefined,
-        city: addressData.city ?? undefined,
-        state: addressData.state ?? undefined,
-        country: addressData.country ?? undefined,
-        postcode: addressData.postcode ?? undefined,
-        location: addressData.location ?? undefined,
+        street: addressData.street ?? null,
+        city: addressData.city ?? null,
+        state: addressData.state ?? null,
+        country: addressData.country ?? null,
+        postcode: addressData.postcode ?? null,
+        location: addressData.location ?? null,
       };
     }
 
     return {
-      street: undefined,
-      city: undefined,
-      state: undefined,
-      country: undefined,
-      postcode: undefined,
-      location: undefined,
+      street: null,
+      city: null,
+      state: null,
+      country: null,
+      postcode: null,
+      location: null,
     };
   }
 }
