@@ -11,16 +11,19 @@ export class LocationDTO {
 
 @ObjectType('PlaceDetailsResult')
 export class PlaceDetailsResultDTO {
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
+  street?: string;
+
+  @Field(() => String, { nullable: true })
   state?: string;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   postcode?: string;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   city?: string;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   country?: string;
 
   @Field(() => LocationDTO, { nullable: true })

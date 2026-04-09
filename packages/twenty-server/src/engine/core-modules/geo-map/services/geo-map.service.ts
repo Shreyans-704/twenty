@@ -3,14 +3,12 @@ import { Injectable } from '@nestjs/common';
 import { isNonEmptyString } from '@sniptt/guards';
 import { isDefined } from 'twenty-shared/utils';
 
+import { PlaceDetailsResultDTO } from 'src/engine/core-modules/geo-map/dtos/place-details-result.dto';
 import {
   type AutocompleteSanitizedResult,
   sanitizeAutocompleteResults,
 } from 'src/engine/core-modules/geo-map/utils/sanitize-autocomplete-results.util';
-import {
-  type AddressFields,
-  sanitizePlaceDetailsResults,
-} from 'src/engine/core-modules/geo-map/utils/sanitize-place-details-results.util';
+import { sanitizePlaceDetailsResults } from 'src/engine/core-modules/geo-map/utils/sanitize-place-details-results.util';
 import { SecureHttpClientService } from 'src/engine/core-modules/secure-http-client/secure-http-client.service';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 
@@ -64,7 +62,7 @@ export class GeoMapService {
   public async getAddressDetails(
     placeId: string,
     token: string,
-  ): Promise<AddressFields | undefined> {
+  ): Promise<PlaceDetailsResultDTO> {
     const httpClient = this.secureHttpClientService.getHttpClient();
 
     const result = await httpClient.get(
@@ -72,12 +70,39 @@ export class GeoMapService {
     );
 
     if (result.data.status === 'OK') {
-      return sanitizePlaceDetailsResults(
+      // Extract country code first to pass to sanitizer for locale-aware formatting
+      let countryCode: string | undefined;
+      const addressComponents = result.data.result?.address_components;
+      if (addressComponents) {
+        const countryComponent = addressComponents.find((component: any) =>
+          component.types.includes('country'),
+        );
+        countryCode = countryComponent?.short_name;
+      }
+
+      const addressData = sanitizePlaceDetailsResults(
         result.data.result?.address_components,
         result.data.result?.geometry?.location,
+        countryCode,
       );
+
+      return {
+        street: addressData.street ?? undefined,
+        city: addressData.city ?? undefined,
+        state: addressData.state ?? undefined,
+        country: addressData.country ?? undefined,
+        postcode: addressData.postcode ?? undefined,
+        location: addressData.location ?? undefined,
+      };
     }
 
-    return {};
+    return {
+      street: undefined,
+      city: undefined,
+      state: undefined,
+      country: undefined,
+      postcode: undefined,
+      location: undefined,
+    };
   }
 }
