@@ -1,6 +1,6 @@
 import {
-  GET_AUTOCOMPLETE_QUERY,
-  GET_PLACE_DETAILS_QUERY,
+    GET_AUTOCOMPLETE_QUERY,
+    GET_PLACE_DETAILS_QUERY,
 } from '@/geo-map/graphql-query/geo-map-appolo.api';
 import { gql } from '@apollo/client';
 

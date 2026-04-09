@@ -33,8 +33,6 @@ export class GeoMapResolver {
     @Args('placeId') placeId: string,
     @Args('token') token: string,
   ): Promise<PlaceDetailsResultDTO> {
-    return this.geoMapService.getAddressDetails(placeId, token) as Promise<
-      PlaceDetailsResultDTO
-    >;
+    return this.geoMapService.getAddressDetails(placeId, token);
   }
 }

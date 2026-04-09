@@ -188,8 +188,14 @@ export const AddressInput = ({
       const token = tokenForPlaceApi ?? '';
       if (!isDefined(placeAutocomplete)) return;
 
-      // Don't pass the full autocomplete text - let the street address come from place details
-      autoFillInputsFromPlaceDetails(placeId, token, undefined, internalValue);
+      // Use autocomplete text as fallback if place details street is missing
+      const fallbackStreet = placeAutocomplete.text;
+      autoFillInputsFromPlaceDetails(
+        placeId,
+        token,
+        fallbackStreet,
+        internalValue,
+      );
     },
     [
       placeAutocompleteData,
