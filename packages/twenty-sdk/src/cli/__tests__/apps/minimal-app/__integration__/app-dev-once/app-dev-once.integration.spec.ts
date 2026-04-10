@@ -11,6 +11,13 @@ import { pathExists, readJson, remove } from '@/cli/utilities/file/fs-utils';
 
 const OUTPUT_PATH = join(MINIMAL_APP_PATH, OUTPUT_DIR);
 const MANIFEST_PATH = join(OUTPUT_PATH, 'manifest.json');
+const expectedManifestForDevOnce: Manifest = {
+  ...EXPECTED_MANIFEST,
+  application: {
+    ...EXPECTED_MANIFEST.application,
+    packageJsonChecksum: '[checksum]',
+  },
+};
 
 describe('minimal-app dev-once', () => {
   let result: CommandResult<AppDevOnceResult>;
@@ -82,7 +89,7 @@ describe('minimal-app dev-once', () => {
       );
 
       expect(manifest).toEqual(
-        normalizeManifestForComparison(EXPECTED_MANIFEST),
+        normalizeManifestForComparison(expectedManifestForDevOnce),
       );
     });
   });
