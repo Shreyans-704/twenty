@@ -81,7 +81,7 @@
       "outputs": [],
       "options": {
         "cwd": "packages/twenty-server",
-        "command": "node dist/main.js",
+        "command": "echo '🚀 Starting server...' && NODE_ENV=test node dist/main.js & sleep 10",
         "parallel": false
       }
     },
