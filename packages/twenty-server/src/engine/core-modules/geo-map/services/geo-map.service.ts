@@ -5,12 +5,12 @@ import { isDefined } from 'twenty-shared/utils';
 
 import { PlaceDetailsResultDTO } from 'src/engine/core-modules/geo-map/dtos/place-details-result.dto';
 import {
-    type AutocompleteSanitizedResult,
-    sanitizeAutocompleteResults,
+  type AutocompleteSanitizedResult,
+  sanitizeAutocompleteResults,
 } from 'src/engine/core-modules/geo-map/utils/sanitize-autocomplete-results.util';
 import {
-    type AddressComponent,
-    sanitizePlaceDetailsResults,
+  type AddressComponent,
+  sanitizePlaceDetailsResults,
 } from 'src/engine/core-modules/geo-map/utils/sanitize-place-details-results.util';
 import { SecureHttpClientService } from 'src/engine/core-modules/secure-http-client/secure-http-client.service';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
@@ -78,8 +78,7 @@ export class GeoMapService {
       const addressComponents = result.data.result?.address_components;
       if (addressComponents) {
         const countryComponent = addressComponents.find(
-          (component: AddressComponent) =>
-            component.types.includes('country'),
+          (component: AddressComponent) => component.types.includes('country'),
         );
         countryCode = countryComponent?.short_name;
       }
