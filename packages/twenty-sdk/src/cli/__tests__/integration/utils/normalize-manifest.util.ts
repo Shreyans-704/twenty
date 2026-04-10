@@ -42,7 +42,7 @@ export const normalizeManifestForComparison = <T extends Manifest>(
       ...component,
       builtComponentChecksum: component.builtComponentChecksum
         ? '[checksum]'
-        : '',
+        : null,
     })),
   ),
 });

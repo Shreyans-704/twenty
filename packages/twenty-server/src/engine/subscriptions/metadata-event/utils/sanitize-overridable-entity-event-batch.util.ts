@@ -3,10 +3,10 @@ import { isDefined } from 'twenty-shared/utils';
 
 import { type MetadataEventBatch } from 'src/engine/subscriptions/metadata-event/types/metadata-event-batch.type';
 import {
-    type CreateMetadataEvent,
-    type DeleteMetadataEvent,
-    type MetadataEvent,
-    type UpdateMetadataEvent,
+  type CreateMetadataEvent,
+  type DeleteMetadataEvent,
+  type MetadataEvent,
+  type UpdateMetadataEvent,
 } from 'src/engine/workspace-manager/workspace-migration/workspace-migration-runner/types/metadata-event';
 
 const OVERRIDABLE_ENTITY_METADATA_NAMES = new Set<AllMetadataName>([
@@ -19,7 +19,7 @@ const OVERRIDABLE_ENTITY_METADATA_NAMES = new Set<AllMetadataName>([
 const resolveRecordOverrides = (
   record: Record<string, unknown>,
 ): Record<string, unknown> => {
-  const { overrides, isActive, ...base } = record;
+  const { overrides, isActive: _isActive, ...base } = record;
 
   if (!isDefined(overrides)) {
     return base;
