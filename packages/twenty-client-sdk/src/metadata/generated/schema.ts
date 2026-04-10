@@ -2235,8 +2235,8 @@ export interface Location {
 }
 
 export interface PlaceDetailsResult {
-    state?: Scalars['String']
     street?: Scalars['String']
+    state?: Scalars['String']
     postcode?: Scalars['String']
     city?: Scalars['String']
     country?: Scalars['String']
@@ -5486,8 +5486,8 @@ export interface LocationGenqlSelection{
 }
 
 export interface PlaceDetailsResultGenqlSelection{
-    state?: boolean | number
     street?: boolean | number
+    state?: boolean | number
     postcode?: boolean | number
     city?: boolean | number
     country?: boolean | number

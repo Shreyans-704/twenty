@@ -5036,10 +5036,10 @@ export default {
             ]
         },
         "PlaceDetailsResult": {
-            "state": [
+            "street": [
                 1
             ],
-            "street": [
+            "state": [
                 1
             ],
             "postcode": [
