@@ -552,6 +552,16 @@ msgstr "Η εφαρμογή δεν είναι εγκατεστημένη σε α
 msgid "Application not found."
 msgstr "Η εφαρμογή δεν βρέθηκε."
 
+#. js-lingui-id: kuNcoR
+#: src/engine/core-modules/application/application.exception.ts
+msgid "Application post-install logic function failed."
+msgstr ""
+
+#. js-lingui-id: UTxpa1
+#: src/engine/core-modules/application/application.exception.ts
+msgid "Application pre-install logic function failed."
+msgstr ""
+
 #. js-lingui-id: DE/icK
 #: src/engine/core-modules/application/application-registration/application-registration.exception.ts
 msgid "Application registration not found."
@@ -7385,6 +7395,11 @@ msgstr ""
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Too many admin candidates found."
 msgstr "Βρέθηκαν υπερβολικά πολλοί υποψήφιοι διαχειριστές."
+
+#. js-lingui-id: qSInGy
+#: src/engine/core-modules/tool/tools/email-tool/exceptions/email-tool.exception.ts
+msgid "Too many recipients."
+msgstr ""
 
 #. js-lingui-id: MYdvBz
 #: src/engine/api/graphql/workspace-query-runner/workspace-query-runner.exception.ts
