@@ -4248,6 +4248,7 @@ export type PlaceDetailsResult = {
   location?: Maybe<Location>;
   postcode?: Maybe<Scalars['String']>;
   state?: Maybe<Scalars['String']>;
+  street?: Maybe<Scalars['String']>;
 };
 
 export type PostgresCredentials = {

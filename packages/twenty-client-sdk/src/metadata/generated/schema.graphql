@@ -2528,6 +2528,7 @@ type Location {
 
 type PlaceDetailsResult {
   state: String
+  street: String
   postcode: String
   city: String
   country: String

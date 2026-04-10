@@ -5039,6 +5039,9 @@ export default {
             "state": [
                 1
             ],
+            "street": [
+                1
+            ],
             "postcode": [
                 1
             ],
