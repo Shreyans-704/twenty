@@ -79,7 +79,9 @@ const bootstrap = async () => {
   // Inject the server url in the frontend page
   generateFrontConfig();
 
-  await app.listen(twentyConfigService.get('NODE_PORT') || 3000);
+  const port = Number(twentyConfigService.get('NODE_PORT')) || 3000;
+  await app.listen(port);
+  console.log(`Server listening on port ${port}`);
 };
 
 bootstrap();
