@@ -102,7 +102,9 @@ export const sanitizePlaceDetailsResults = (
   const useRouteFirst = countryCode
     ? ['CN', 'JP', 'KR'].includes(countryCode)
     : false;
-  const baseStreet = (useRouteFirst ? [route, streetNumber] : [streetNumber, route])
+  const baseStreet = (
+    useRouteFirst ? [route, streetNumber] : [streetNumber, route]
+  )
     .filter((value) => value)
     .join(' ');
   const street = [baseStreet, subpremise || premise]
