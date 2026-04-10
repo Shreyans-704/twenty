@@ -79,7 +79,7 @@ const bootstrap = async () => {
   // Inject the server url in the frontend page
   generateFrontConfig();
 
-  await app.listen(process.env.NODE_PORT || 3000);
+  await app.listen(twentyConfigService.get('NODE_PORT') || 3000);
 };
 
 bootstrap();
