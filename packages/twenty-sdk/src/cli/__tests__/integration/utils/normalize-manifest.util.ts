@@ -11,12 +11,8 @@ export const normalizeManifestForComparison = <T extends Manifest>(
   ...manifest,
   application: {
     ...manifest.application,
-    yarnLockChecksum: manifest.application.yarnLockChecksum
-      ? '[checksum]'
-      : null,
-    packageJsonChecksum: manifest.application.packageJsonChecksum
-      ? '[checksum]'
-      : null,
+    yarnLockChecksum: null,
+    packageJsonChecksum: null,
   },
   objects: sortById(
     manifest.objects.map((object) => ({
