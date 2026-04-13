@@ -74,15 +74,12 @@
     },
     "start:ci-if-needed": {
       "executor": "nx:run-commands",
-      "cache": false,
       "dependsOn": [
         "build"
       ],
-      "outputs": [],
       "options": {
         "cwd": "packages/twenty-server",
-        "command": "echo '🚀 Starting server...' && NODE_ENV=test node dist/main.js & sleep 10",
-        "parallel": false
+        "command": "curl -f -s http://localhost:3000/healthz > /dev/null 2>&1 && echo '✅ Server already running' || (echo '🚀 Server not running, starting...' && nohup nest start &)"
       }
     },
     "start:debug": {
